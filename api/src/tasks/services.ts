@@ -1,5 +1,6 @@
 import mongoose from "mongoose";
 import { Task } from "../db";
+import { sendDiscordMessge } from "../external/discord";
 
 export interface TaskRequest {
     title: string,
@@ -25,6 +26,7 @@ export async function createTask(taskData: TaskRequest) {
 
         const savedTask = await newTask.save();
         console.log('Saved task:', savedTask);
+        sendDiscordMessge(`> New task created! \`${savedTask.Title}\``)
         return savedTask;
     } catch (error) {
         console.error('Error in createTask:', error);
@@ -54,6 +56,9 @@ export async function updateTask(id: string, updateData: Partial<TaskRequest>) {
         task.Deadline = updateData.deadline ?? task.Deadline;
 
         const updatedTask = await task.save();
+
+        sendDiscordMessge(`> Task updated! ${updatedTask.Title} ({${updatedTask.Status})`)
+
         console.log('Updated task:', updatedTask);
 
         return updatedTask;
@@ -79,6 +84,12 @@ export async function getAllTasks() {
 
 export async function deleteTask(id: string) {
     try {
+        const task = await Task.findById(id);
+        if (!task) {
+            console.log('Task not found');
+            return null;
+        }
+        sendDiscordMessge(`> Removing task \`${task?.Title}\``)
         return await Task.findByIdAndDelete(id);
     } catch (error) {
         throw error;
