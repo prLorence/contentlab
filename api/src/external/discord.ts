@@ -1,7 +1,6 @@
 import * as https from "https";
 
 const discordOptions = {
-    // TODO: move this to env variable
     host: "discord.com",
     path: process.env.DISCORD_WEBHOOK,
     method: 'POST',

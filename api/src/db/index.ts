@@ -2,7 +2,6 @@ import mongoose from "mongoose";
 import { TaskSchema } from "./schema";
 
 export async function dbConn() {
-    // TODO: move this to env file
     if (!process.env.MONGODB_CONN) {
         console.error("mongo db connection string not provided");
         return;
