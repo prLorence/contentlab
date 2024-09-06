@@ -1,7 +1,8 @@
-import express, { Request, Response } from 'express';
+import express from 'express';
 import { CommonRoutesConfig } from './base/common-routes';
 import * as http from 'http';
-import { BookRoutes } from './books/routes';
+import { BookRoutes } from './tasks/routes';
+import { dbConn } from './db';
 
 //NOTE: GET /items: Fetch all items from the MongoDB database.
 //NOTE: POST /items: Add a new item to the MongoDB database.
@@ -20,6 +21,8 @@ app.use(express.json());
 
 routes.push(new BookRoutes(app))
 
+dbConn()
+
 server.listen(port, () => {
     routes.forEach((route: CommonRoutesConfig) => {
         console.log(`Routes configured for ${route.getName()}`);
@@ -28,6 +31,3 @@ server.listen(port, () => {
     // always want to know when the server is done starting up
     console.log(`server listening at http://localhost:${port}`);
 });
-
-
-
