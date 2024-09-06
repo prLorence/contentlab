@@ -1,6 +1,30 @@
 version: '1'
 
 services:
+  web:
+    build:
+      context: ./web
+    image: contentlab-web:latest
+    container_name: web
+    restart: always
+    ports:
+      - "3000:3000"
+    depends_on:
+      - api 
+  api:
+    build:
+      context: ./api
+    image: contentlab-api:latest
+    container_name: api
+    restart: always
+    environment:
+      OPEN_WEATHER_KEY : "a7510c26f4664f88f647114b443d9c67"
+      DISCORD_WEBHOOK : "/api/webhooks/1281491377590636544/4ZgziHH6yNolUJUuJhwChXv7a7A1aPcORfT8YaiqNiGxCn69R6DPZq29xxVUeqB1eW3O"
+      MONGODB_CONN : "mongodb://root:root@mongodb:27017"
+    ports:
+      - "3001:3001"
+    depends_on:
+      - mongodb
   mongodb:
     image: mongo:latest
     container_name: mongodb

@@ -13,7 +13,7 @@ interface TaskRequest {
 }
 
 export async function fetchData(): Promise<ApiResponse> {
-    const response = await fetch('http://localhost:3000/tasks');
+    const response = await fetch('http://localhost:3001/tasks');
     if (!response.ok) {
         throw new Error('Network response was not ok');
     }
@@ -21,7 +21,7 @@ export async function fetchData(): Promise<ApiResponse> {
 };
 
 export async function deleteTask(id: string): Promise<void> {
-    const response = await fetch(`http://localhost:3000/tasks/${id}`, {
+    const response = await fetch(`http://localhost:3001/tasks/${id}`, {
         method: 'DELETE',
     });
     if (!response.ok) {
@@ -30,7 +30,7 @@ export async function deleteTask(id: string): Promise<void> {
 };
 
 export async function updateTask(id: string, updates: any): Promise<void> {
-    await fetch(`http://localhost:3000/tasks/${id}`, {
+    await fetch(`http://localhost:3001/tasks/${id}`, {
         method: 'PUT',
         headers: {
             'Content-Type': 'application/json',
@@ -41,7 +41,7 @@ export async function updateTask(id: string, updates: any): Promise<void> {
 
 export const createTask = async (taskData: TaskRequest): Promise<void> => {
     try {
-        const response = await fetch('http://localhost:3000/tasks', {
+        const response = await fetch('http://localhost:3001/tasks', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
