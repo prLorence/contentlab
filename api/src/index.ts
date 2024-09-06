@@ -1,4 +1,7 @@
 import express, { Request, Response } from 'express';
+import { CommonRoutesConfig } from './base/common-routes';
+import * as http from 'http';
+import { BookRoutes } from './books/routes';
 
 //NOTE: GET /items: Fetch all items from the MongoDB database.
 //NOTE: POST /items: Add a new item to the MongoDB database.
@@ -8,15 +11,22 @@ import express, { Request, Response } from 'express';
 //NOTE: Open weather api that shows the temperature today, store it each request
 //NOTE: Random Cat Facts api at the bottom of the screen
 
-const app = express();
-const port = process.env.PORT || 3000;
+const app: express.Application = express();
+const server: http.Server = http.createServer(app);
+const port = 3000;
+const routes: Array<CommonRoutesConfig> = [];
 
-app.get('/', (req: Request, res: Response) => {
-    res.send('Hello, TypeScript Express!');
-});
+app.use(express.json());
 
-app.listen(port, () => {
-    console.log(`Server running at http://localhost:${port}`);
+routes.push(new BookRoutes(app))
+
+server.listen(port, () => {
+    routes.forEach((route: CommonRoutesConfig) => {
+        console.log(`Routes configured for ${route.getName()}`);
+    });
+    // our only exception to avoiding console.log(), because we
+    // always want to know when the server is done starting up
+    console.log(`server listening at http://localhost:${port}`);
 });
 
 
