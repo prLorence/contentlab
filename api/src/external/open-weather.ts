@@ -41,7 +41,8 @@ export async function getWeatherData(): Promise<WeatherData> {
                 }
             });
         }).on('error', (err) => {
-            reject(`Request error: ${err.message}`);
+            console.error(`getWeatherData => Request error: ${err}`);
+            reject(`Request error: ${err}`);
         });
     });
 }

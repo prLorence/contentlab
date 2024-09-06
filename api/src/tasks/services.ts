@@ -17,7 +17,7 @@ export interface TaskResponse {
     catFact: string;
 }
 
-export async function createTask(taskData: TaskRequest): Promise<TaskResponse> {
+export async function createTask(taskData: TaskRequest): Promise<string> {
     try {
         console.log('Received task data:', taskData);
 
@@ -26,9 +26,9 @@ export async function createTask(taskData: TaskRequest): Promise<TaskResponse> {
         }
 
         const newTask = new Task({
-            Title: taskData.title,
-            Status: taskData.status || "TODO", // Use the provided Status or default to "TODO"
-            Deadline: taskData.deadline,
+            title: taskData.title,
+            status: taskData.status || "TODO", // Use the provided Status or default to "TODO"
+            deadline: taskData.deadline,
         });
 
         console.log('Created new Task object:', newTask);
@@ -36,17 +36,9 @@ export async function createTask(taskData: TaskRequest): Promise<TaskResponse> {
         const savedTask = await newTask.save();
         console.log('Saved task:', savedTask);
 
-        sendDiscordMessge(`> New task created! \`${savedTask.Title}\``)
+        sendDiscordMessge(`> New task created! \`${savedTask.title}\``)
 
-        console.log(await getWeatherData())
-
-        const response: TaskResponse = {
-            taskId: savedTask.id,
-            weather: await getWeatherData(),
-            catFact: await getCatFact()
-        }
-
-        return response;
+        return savedTask.id;
     } catch (error) {
         console.error('Error in createTask:', error);
         if (error instanceof mongoose.Error.ValidationError) {
@@ -70,13 +62,13 @@ export async function updateTask(id: string, updateData: Partial<TaskRequest>) {
             return null;
         }
 
-        task.Title = updateData.title ?? task.Title;
-        task.Status = updateData.status ?? task.Status;
-        task.Deadline = updateData.deadline ?? task.Deadline;
+        task.title = updateData.title ?? task.title;
+        task.status = updateData.status ?? task.status;
+        task.deadline = updateData.deadline ?? task.deadline;
 
         const updatedTask = await task.save();
 
-        sendDiscordMessge(`> Task updated! ${updatedTask.Title} ({${updatedTask.Status})`)
+        sendDiscordMessge(`> Task updated! ${updatedTask.title} (${updatedTask.status})`)
 
         console.log('Updated task:', updatedTask);
 
@@ -125,7 +117,7 @@ export async function deleteTask(id: string) {
             catFact: await getCatFact()
         }
 
-        sendDiscordMessge(`> Removed task \`${task.Title}\``)
+        sendDiscordMessge(`> Removed task \`${task.title}\``)
 
         await Task.findByIdAndDelete(id);
 
