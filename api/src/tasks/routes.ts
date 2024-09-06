@@ -21,7 +21,7 @@ export class BookRoutes extends CommonRoutesConfig {
             try {
                 const taskData: TaskRequest = req.body; // Capture the data from the request body
                 const newTask = await createTask(taskData);
-                return res.status(201).json(newTask.id ?? 0);
+                return res.status(201).json(newTask);
             } catch (error) {
                 console.error('Error creating task:', error);
                 return res.status(500).json({ error: 'Internal Server Error' });

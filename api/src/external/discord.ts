@@ -3,7 +3,7 @@ import * as https from "https";
 const discordOptions = {
     // TODO: move this to env variable
     host: "discord.com",
-    path: "/api/webhooks/1281491377590636544/4ZgziHH6yNolUJUuJhwChXv7a7A1aPcORfT8YaiqNiGxCn69R6DPZq29xxVUeqB1eW3O",
+    path: process.env.DISCORD_WEBHOOK,
     method: 'POST',
     headers: {
         'Accept': 'application/json',
