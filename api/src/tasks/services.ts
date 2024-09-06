@@ -38,17 +38,40 @@ export async function createTask(taskData: TaskRequest) {
     }
 }
 
-export async function getAllTasks() {
+export async function updateTask(id: string, updateData: Partial<TaskRequest>) {
     try {
-        return await Task.find();
+        console.log('Updating task with id:', id);
+        console.log('Update data:', updateData);
+
+        const task = await Task.findById(id);
+        if (!task) {
+            console.log('Task not found');
+            return null;
+        }
+
+        task.Title = updateData.title ?? task.Title;
+        task.Status = updateData.status ?? task.Status;
+        task.Deadline = updateData.deadline ?? task.Deadline;
+
+        const updatedTask = await task.save();
+        console.log('Updated task:', updatedTask);
+
+        return updatedTask;
     } catch (error) {
-        throw error;
+        console.error('Error in updateTask:', error);
+        if (error instanceof mongoose.Error.ValidationError) {
+            throw new Error('Validation error: ' + error.message);
+        } else if (error instanceof mongoose.Error) {
+            throw new Error('Database error: ' + error.message);
+        } else {
+            throw error;
+        }
     }
 }
 
-export async function updateTask(id: string, updateData: TaskRequest) {
+export async function getAllTasks() {
     try {
-        return await Task.findByIdAndUpdate(id, updateData, { new: true });
+        return await Task.find();
     } catch (error) {
         throw error;
     }
