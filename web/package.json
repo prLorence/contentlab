@@ -8,7 +8,8 @@
 		"dev": "vite --open",
 		"preview": "vite preview",
 		"format": "prettier -uw --cache --ignore-path .gitignore .",
-		"lint": "run-p run-tsc run-eslint run-stylelint"
+		"lint": "run-p run-tsc run-eslint run-stylelint",
+		"eslint": "eslint --fix --ext .ts,.tsx ."
 	},
 	"dependencies": {
 		"@tanstack/react-query": "5.29.2",
